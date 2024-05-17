@@ -27,89 +27,84 @@ def every_day_habits():
 @shared_task()
 def every_few_days_habits():
     """
-    Фильтрует модель habits по переодичности и исключает пользователей,
-    у которых нет телеграм id.
+    Фильтрует модель habits по переодичности, времени
+    и исключает пользователей, у которых нет телеграм id.
     Делает цикл по отфильтрованным значениям habits.
-    Определяет дату и время отправки уведовления пользователю,
+    Определяет дату отправки уведовления пользователю,
     с минутным промежутком,
     если уведомление было отправлено ранее.
-    Иначе определяет время для отправки уведовления пользователю.
+    Иначе отправляет уведовление пользователю
+    и определяет время для следующей отправки уведовления.
     """
-    habits = (Habits.objects.filter(periodicity='Раз в несколько дней').
-              exclude(user__telegram_id=None))
-
-    for every_few_days in habits:
-        if every_few_days.last_notification:
-            time_max = datetime.now() + timedelta(seconds=30)
-            time_min = datetime.now() - timedelta(seconds=30)
-            if (every_few_days.last_notification.date()
+    time_max = datetime.now() + timedelta(seconds=30)
+    time_min = datetime.now() - timedelta(seconds=30)
+    habits = (
+        Habits.objects.filter(
+            periodicity='Раз в несколько дней'
+        ).
+        exclude(
+            user__telegram_id=None
+        ).
+        filter(
+            time__lte=time_max.time(),
+            time__gte=time_min.time()
+        )
+    )
+    for habit in habits:
+        if habit.last_notification:
+            if (habit.last_notification.date()
                     == datetime.now().date()):
-                if (time_min.time() <=
-                        every_few_days.last_notification.time() <=
-                        time_max.time()):
-                    create_message(every_few_days)
 
-                    every_few_days.last_notification = (
-                                every_few_days.last_notification
-                                + timedelta(days=2))
-
-                    every_few_days.save()
-            else:
-                data = datetime.now()
-                time_max = data + timedelta(seconds=30)
-                time_min = data - timedelta(seconds=30)
-                if (time_min.time() <=
-                    every_few_days.time <=
-                        time_max.time()):
-
-                    create_message(every_few_days)
-
-                    every_few_days.last_notification = data + timedelta(days=2)
-
-                    every_few_days.save()
+                create_message(habit)
+                habit.last_notification = (
+                        habit.last_notification
+                        + timedelta(days=2))
+                habit.save()
+        else:
+            create_message(habit)
+            habit.last_notification = (
+                    datetime.now() + timedelta(days=2))
+            habit.save()
 
 
 @shared_task()
 def every_week_habits():
     """
-    Фильтрует модель habits по переодичности и исключает пользователей,
-    у которых нет телеграм id.
+    Фильтрует модель habits по переодичности, времени
+    и исключает пользователей, у которых нет телеграм id.
     Делает цикл по отфильтрованным значениям habits.
-    Определяет дату и время отправки уведовления пользователю,
+    Определяет дату отправки уведовления пользователю,
     с минутным промежутком,
     если уведомление было отправлено ранее.
-    Иначе определяет время для отправки уведовления пользователю.
+    Иначе отправляет уведовление пользователю
+    и определяет время для следующей отправки уведовления.
     """
-    habits = (Habits.objects.filter(periodicity='Раз в неделю').
-              exclude(user__telegram_id=None))
-
-    for every_week in habits:
-        if every_week.last_notification:
-            time_max = datetime.now() + timedelta(seconds=30)
-            time_min = datetime.now() - timedelta(seconds=30)
-            if (every_week.last_notification.date()
+    time_max = datetime.now() + timedelta(seconds=30)
+    time_min = datetime.now() - timedelta(seconds=30)
+    habits = (
+        Habits.objects.filter(
+            periodicity='Раз в неделю'
+        ).
+        exclude(
+            user__telegram_id=None
+        ).
+        filter(
+            time__lte=time_max.time(),
+            time__gte=time_min.time()
+        )
+    )
+    for habit in habits:
+        if habit.last_notification:
+            if (habit.last_notification.date()
                     == datetime.now().date()):
-                if (time_min.time() <=
-                    every_week.last_notification.time() <=
-                        time_max.time()):
 
-                    create_message(every_week)
-
-                    every_week.last_notification = (
-                        every_week.last_notification
+                create_message(habit)
+                habit.last_notification = (
+                        habit.last_notification
                         + timedelta(days=7))
-
-                    every_week.save()
+                habit.save()
         else:
-            data = datetime.now()
-            time_max = data + timedelta(seconds=30)
-            time_min = data - timedelta(seconds=30)
-            if (time_min.time() <=
-                every_week.time <=
-                    time_max.time()):
-
-                create_message(every_week)
-
-                every_week.last_notification = data + timedelta(days=7)
-
-                every_week.save()
+            create_message(habit)
+            habit.last_notification = (
+                    datetime.now() + timedelta(days=7))
+            habit.save()

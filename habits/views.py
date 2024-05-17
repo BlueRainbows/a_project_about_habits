@@ -31,6 +31,7 @@ class HabitsCreateView(CreateAPIView):
     serializer_class = HabitsSerializer
 
     def perform_create(self, serializer):
+        """ Присвоение к привычке создателя """
         habits = serializer.save(user=self.request.user)
         habits.save()
 
@@ -42,6 +43,7 @@ class HabitsUpdateView(UpdateAPIView):
     permission_classes = [IsAuthenticated & PermissionUser]
 
     def perform_update(self, serializer):
+        """ Присвоение к привычке создателя """
         habits = serializer.save(user=self.request.user)
         habits.save()
 

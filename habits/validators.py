@@ -10,7 +10,6 @@ class AwardValidator:
     При одновременном заполнении вознаграждения и связанной привычки,
     возникает ошибка валидации.
     """
-
     def __init__(self, award, pleasant_habit):
         self.award = award
         self.pleasant_habit = pleasant_habit
@@ -31,7 +30,6 @@ class TimeValidator:
     равный максимальному времени на выполнение привычки.
     Проверяет, что время указанное пользователем не превышает 2-ух минут.
     """
-
     def __init__(self, time_to_complete):
         self.time_to_complete = time_to_complete
 
@@ -51,7 +49,6 @@ class RelatedHabitValidator:
     Проверяет что в связанные привычки
     могут попадать только привычки с признаком приятной привычки (True).
     """
-
     def __init__(self, pleasant_habit):
         self.pleasant_habit = pleasant_habit
 
@@ -70,7 +67,6 @@ class PleasantHabitValidator:
     Проверяет что у приятной привычки
     не может быть вознаграждения или связанной привычки.
     """
-
     def __init__(self, sign_pleasant_habit, pleasant_habit, award):
         self.sign_pleasant_habit = sign_pleasant_habit
         self.pleasant_habit = pleasant_habit
@@ -93,7 +89,6 @@ class PeriodicityValidator:
     Валидатор для проверки периодичности привычки.
     Проверяет что у периодичности привычки не пустое значение.
     """
-
     def __init__(self, periodicity):
         self.periodicity = periodicity
 
