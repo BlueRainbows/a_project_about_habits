@@ -84,7 +84,7 @@ class HabitsTestCase(APITestCase):
             'action': 'Съесть сырок',
             'publish': 'True',
             'sign_pleasant_habit': 'True',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
         }
         response = self.client.post(path=url, data=data, format='json')
 
@@ -107,7 +107,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:03:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'publish': 'True',
             'sign_pleasant_habit': 'True',
         }
@@ -129,7 +129,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'award': 'Получить удовольствие',
             'publish': 'True',
             'sign_pleasant_habit': 'True',
@@ -153,7 +153,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'publish': 'True',
             'sign_pleasant_habit': 'True',
             'pleasant_habit': self.pleasant_habit.id,
@@ -178,7 +178,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'publish': 'True',
             'pleasant_habit': self.useful_habit.id,
         }
@@ -200,6 +200,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
+            'periodicity': 9,
             'publish': 'True',
         }
         response = self.client.post(path=url, data=data, format='json')
@@ -211,9 +212,10 @@ class HabitsTestCase(APITestCase):
 
         self.assertEqual(
             resp.get('non_field_errors'),
-            ["Периодичность привычки не может быть пустой. "
-                "Выберите из вариантов: "
-                "Каждый день, Раз в несколько дней, Раз в неделю"])
+            [
+                "Периодичность привычки не может превышать более 7 дней"
+            ]
+        )
 
     def test_update_habits(self):
         """
@@ -227,7 +229,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'publish': 'True',
             'pleasant_habit': self.pleasant_habit.id,
         }
@@ -251,7 +253,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:03:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'publish': 'True',
             'sign_pleasant_habit': 'True',
         }
@@ -273,7 +275,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'award': 'Получить удовольствие',
             'publish': 'True',
             'sign_pleasant_habit': 'True',
@@ -297,7 +299,7 @@ class HabitsTestCase(APITestCase):
             'time': '16:00:00',
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
-            'periodicity': 'Раз в неделю',
+            'periodicity': 1,
             'publish': 'True',
             'sign_pleasant_habit': 'True',
             'pleasant_habit': self.pleasant_habit.id,
@@ -320,6 +322,7 @@ class HabitsTestCase(APITestCase):
             'user': self.user_1.id,
             'place': 'Кухня',
             'time': '16:00:00',
+            'periodicity': 9,
             'action': 'Съесть сырок',
             'time_to_complete': '00:02:00',
             'publish': 'True',
@@ -333,9 +336,7 @@ class HabitsTestCase(APITestCase):
 
         self.assertEqual(
             resp.get('non_field_errors'),
-            ["Периодичность привычки не может быть пустой. "
-             "Выберите из вариантов: "
-             "Каждый день, Раз в несколько дней, Раз в неделю"])
+            ["Периодичность привычки не может превышать более 7 дней"])
 
     def test_delete_habits(self):
         """

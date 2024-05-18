@@ -17,14 +17,14 @@ def send_telegram_message(telegram_id, message):
     )
 
 
-def create_message(day):
+def create_message(habits):
     """
     Формирует сообщение для Telegram, передает параметры
     в функцию send_telegram_message для отправки,
     формирует отчёт о проделанной работе.
     """
-    message = ("Когда: " + str(day.time) + '\n' +
-               "Где: " + day.place + '\n' +
-               "Что сделать: " + day.action)
-    send_telegram_message(day.user.telegram_id, message)
+    message = ("Когда: " + str(habits.time) + '\n' +
+               "Где: " + habits.place + '\n' +
+               "Что сделать: " + habits.action)
+    send_telegram_message(habits.user.telegram_id, message)
     logger.info(f'Уведомление {message} отправлено')

@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 from dotenv import load_dotenv
 from pathlib import Path
@@ -185,16 +185,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_BEAT_SCHEDULE = {
     'Every_day_habits': {
-        'task': 'habits.tasks.every_day_habits',
+        'task': 'habits.tasks.send_habits',
         'schedule': timedelta(minutes=1),
-    },
-    'Every_few_days_habits': {
-        'task': 'habits.tasks.every_few_days_habits',
-        'schedule': timedelta(minutes=1)
-    },
-    'Every_week_habits': {
-        'task': 'habits.tasks.every_week_habits',
-        'schedule': timedelta(minutes=1)
-    },
-
+    }
 }

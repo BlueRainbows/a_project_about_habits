@@ -87,15 +87,13 @@ class PleasantHabitValidator:
 class PeriodicityValidator:
     """
     Валидатор для проверки периодичности привычки.
-    Проверяет что у периодичности привычки не пустое значение.
+    Проверяет что в периодичности привычки не более 7 дней.
     """
     def __init__(self, periodicity):
         self.periodicity = periodicity
 
     def __call__(self, value):
         get_value = dict(value).get(self.periodicity)
-        if get_value is None:
+        if int(get_value) > 7:
             raise ValidationError(
-                "Периодичность привычки не может быть пустой. "
-                "Выберите из вариантов: "
-                "Каждый день, Раз в несколько дней, Раз в неделю")
+                "Периодичность привычки не может превышать более 7 дней")

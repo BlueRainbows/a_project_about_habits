@@ -1,6 +1,7 @@
 from rest_framework.generics import (ListAPIView, CreateAPIView,
-                                     UpdateAPIView, DestroyAPIView)
-from rest_framework.permissions import IsAuthenticated
+                                     UpdateAPIView, DestroyAPIView,
+                                     RetrieveAPIView)
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from habits.models import Habits
 from habits.pagination import PaginationHabits
@@ -8,10 +9,18 @@ from habits.permissions import PermissionUser
 from habits.serializers.habits import HabitsSerializer
 
 
+class HabitsRetrieveAPIView(RetrieveAPIView):
+    """ Детальный просмотр привычки"""
+    queryset = Habits.objects.all().filter(publish=True)
+    serializer_class = HabitsSerializer
+    permission_classes = [IsAuthenticated & PermissionUser]
+
+
 class HabitsListAllView(ListAPIView):
     """ Список общедоступных привычек """
     queryset = Habits.objects.all().filter(publish=True)
     serializer_class = HabitsSerializer
+    permission_classes = [AllowAny]
 
 
 class HabitsListPersonalView(ListAPIView):
